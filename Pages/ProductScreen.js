@@ -199,7 +199,7 @@ export default function ProductScreen({ navigation }) {
       <ScrollView > 
         <RefreshControl refreshing={refreshing} onRefresh={() => refreshStarting()} />
         
-          {/* ListItem Implement..*/}
+          {/* ListItem Implement.*/}
         {
           filteredProducts.map((item,i) => (
             <ListItem bottomDivider key = {i} onPress={() => presRow(item)} 
