@@ -3,6 +3,7 @@ import React, {useState,useEffect} from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, RefreshControl } from 'react-native';
 import { ListItem, SearchBar } from 'react-native-elements';
 import { Icon } from 'react-native-elements/dist/icons/Icon';
+import apiFuncs from '../env/apiFunctions';
 
 
 export default function Categories({ navigation }) {
@@ -11,18 +12,13 @@ export default function Categories({ navigation }) {
   const [refreshing, setRefreshing] = React.useState(Boolean);
   const refreshStarting = () => {
     setRefreshing(true)
-    // this is for GET Category
-    fetch('https://northwind.vercel.app/api/categories')
-    .then( (results) => results.json() )
-    .then( (data) => {
-
-      
-      setFilteredCategories(data);
-      setcategories(data);
-      setRefreshing(false)
-
-
-    })
+    // this is for get Category
+    apiFuncs.get('api/categories')
+      .then((data) => {
+        setFilteredCategories(data)
+        setcategories(data)
+        setRefreshing(false)
+      })
   }
   //this is For ActivityIndicator
   const [animating,setAnimating] = useState(Boolean)
@@ -36,7 +32,7 @@ export default function Categories({ navigation }) {
   const searchFilterFunction = (text) => {
     // Check if searched text is not blank
     if (text) {
-      // Inserted text is not blank
+      // Text is not blank
       // Filter the categories
       // Update FilteredCategories
       const newData = categories.filter(function (item) {
@@ -60,53 +56,35 @@ export default function Categories({ navigation }) {
 
   useEffect(() => {
 
-
     fillDataFromWeb();
-
 
   }, []);
   
   const fillDataFromWeb = () => {
     setAnimating(true)
-    // this is for GET Category
-    fetch('https://northwind.vercel.app/api/categories')
-    .then( (results) => results.json() )
-    .then( (data) => {
+    // this is for get Category
+    apiFuncs.get('api/categories')
+      .then((data) => {
+        setFilteredCategories(data);
+        // setcategories(data)
+        setAnimating(false)
+      })
 
-      
-      setFilteredCategories(data);
-      setcategories(data);
-      setAnimating(false)
+  }// fillDataFromWeb
 
 
+  //Delete icon Onpress Func
+  const deleteCategory = (id) => {
+
+    apiFuncs.delete('api/categories/', id)
+    .then((data) => {
+      fillDataFromWeb()
     })
 
   }
 
-  //Delete icon Onpress Func
-  
-  const deleteCategory = (id) => {
 
-    let content = {
-      id:id
-    }
-
-    // this is for delete Category
-      let requestoptions = {
-        method: 'DELETE',
-        body: JSON.stringify(content)
-    }
-
-    fetch('https://northwind.vercel.app/api/categories/' + id  , requestoptions)
-     .then((res) => res.json())
-      .then((data) => {
-
-        fillDataFromWeb();
-
-      })
-
-  }
-// creating alert for user be sure about deleting
+// Creating alert for user be sure about deleting
   const createDeleteAlert = (category) =>{
     Alert.alert(
       category.name,
@@ -123,20 +101,23 @@ export default function Categories({ navigation }) {
         }
       ]
     );
-  }
+  }//createDeleteAlert
 
   
 
   const presRow = (gelenId) =>{
     console.log(gelenId)
+    CategoryUpdatePressHandler(gelenId)
   }
 
 
 
 
 
-  const CategoryUpdatePressHandler = () =>{
-    navigation.navigate('CategoriesUpdate');
+  const CategoryUpdatePressHandler = (idnum) =>{
+    navigation.navigate('CategoriesUpdate', {
+      id:idnum
+    });
   }
   // category add buton implement
   React.useLayoutEffect(() => {
@@ -173,10 +154,16 @@ export default function Categories({ navigation }) {
       </SafeAreaView>
     )
   }
-  
+
+
+
+
+  // MAIN BLOK
+
   if (animating) {
     // this block works while fetching data
     return(
+      // I create activity indicator, maybe user has a low internet connection
       downloadScreen()
 
     );

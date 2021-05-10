@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState,useEffect} from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, RefreshControl } from 'react-native';
 import { ListItem, SearchBar, Icon } from 'react-native-elements';
+import apiFuncs from '../env/apiFunctions';
 
 
 export default function ProductScreen({ navigation }) {
@@ -9,20 +10,19 @@ export default function ProductScreen({ navigation }) {
 
   // This is for refreshControl
   const [refreshing, setRefreshing] = React.useState(Boolean);
+
   const refreshStarting = () => {
     setRefreshing(true)
     // this is for GET Products
-    fetch('https://northwind.vercel.app/api/products')
-    .then( (results) => results.json() )
-    .then( (data) => {
-
-      
-      setFilteredProducts(data);
-      setProducts(data);
-      setRefreshing(false)
+    apiFuncs.get("api/products")
+      .then((data) => {
+        setFilteredProducts(data)
+        setProducts(data)
+        setRefreshing(false)
+      })
 
 
-    })
+
   }
 
   //this is For ActivityIndicator
@@ -68,18 +68,12 @@ export default function ProductScreen({ navigation }) {
   
   const fillDataFromWeb = () => {
     setAnimating(true)
-    // this is for GET Products
-    fetch('https://northwind.vercel.app/api/products')
-    .then( (results) => results.json() )
-    .then( (data) => {
-
-      
-      setFilteredProducts(data);
-      setProducts(data);
-      setAnimating(false)
-
-
-    })
+    apiFuncs.get('api/products')
+      .then((data) => {
+        setFilteredProducts(data);
+        setProducts(data)
+        setAnimating(false)
+      })
 
   }
 
@@ -87,24 +81,12 @@ export default function ProductScreen({ navigation }) {
   
     const deleteProduct = (id) => {
 
-      let content = {
-        id:id
-      }
-  
-      // This is for DELETE Products
-        let requestoptions = {
-          method: 'DELETE',
-          body: JSON.stringify(content)
-      }
-  
-      fetch('https://northwind.vercel.app/api/products/' + id  , requestoptions)
-       .then((res) => res.json())
+      apiFuncs.delete('api/products/', id)
         .then((data) => {
-  
           fillDataFromWeb();
-  
         })
-  
+
+
     }
 
 // creating ALERT for user be sure about deleting
