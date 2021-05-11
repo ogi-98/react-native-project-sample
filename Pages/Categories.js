@@ -80,12 +80,22 @@ export default function Categories({ navigation }) {
     .then((data) => {
       fillDataFromWeb()
     })
+    .catch((msg) => {
+      console.log('====================================');
+      console.log(msg);
+      console.log('====================================');
+    })
 
   }
 
 
 // Creating alert for user be sure about deleting
   const createDeleteAlert = (category) =>{
+
+    
+    // console.log(category);
+    // deleteCategory(category.id)
+    
     Alert.alert(
       category.name,
       "Are you sure about delete category",

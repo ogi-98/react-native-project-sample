@@ -19,7 +19,6 @@ const manager = {
 
     } ,
     //POST
-
     post: async (url, data) => {
 
         let resultdata;
@@ -27,12 +26,34 @@ const manager = {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
-                'Accept': 'application/json',
+                // Accept: 'application/json',
                 'Content-Type': 'application/json'
             }
         }
 
-        await fetch(conf.apiurl + url, requestOptions)
+        await fetch(conf.apiUrl + url, requestOptions)
+                .then((res) => res.json())
+                .then((data) => {
+                resultdata = data;
+                })
+
+        return resultdata;
+
+    } ,
+
+    patch: async (url, data) => {
+
+        let resultdata;
+        let requestOptions = {
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        }
+
+        await fetch(conf.apiUrl + url, requestOptions)
                 .then((res) => res.json())
                 .then((data) => {
                 resultdata = data;
@@ -57,8 +78,10 @@ const manager = {
         method: 'DELETE',
         body: JSON.stringify(content)
     }
-
-    await fetch(conf.apiurl + url, requestoptions)
+console.log('====================================');
+console.log(conf);
+console.log('====================================');
+    await fetch(conf.apiUrl + url + id, requestoptions)
             .then((res) => res.json())
             .then((data) => {
                 resultdata = data;

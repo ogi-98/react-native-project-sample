@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator, TextInput,Alert } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button , Icon} from 'react-native-elements';
 import apiFuncs from '../env/apiFunctions';
 
 
@@ -41,7 +41,7 @@ export default function CategoriesUpdate({ route, navigation}) {
 
   const updateData = (data) => {
     setloading(true)
-    apiFuncs.post('api/categories/'+ category.id, data)
+    apiFuncs.patch('api/categories/'+ category.id, data)
     .then((result)=>{
       setloading(false)
       Alert.alert(
@@ -60,11 +60,6 @@ export default function CategoriesUpdate({ route, navigation}) {
     setloading(!loading)
 
   }
-  const whiteSpaceRemover = (str) => {
-    let text;
-    text = str.replace('\n','').trim()
-  }
-
 
   if (animating) {
 
@@ -88,10 +83,12 @@ export default function CategoriesUpdate({ route, navigation}) {
           
     
           {/* 1. box */}
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between',marginLeft:10,
+          <View style={{ flex: 1, alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between',marginLeft:10,
               marginRight:10, marginTop:20 , marginBottom: 20}}>
-              <Text style={{ color: 'black', fontWeight:'bold', fontSize: 24 }}>Category Update</Text>
+              <Text style={{ color: '#4285F4', fontWeight:'bold', fontSize: 24 }}>Category Update</Text>
+              <Icon name='autorenew' type='material' color='#4285F4' raised></Icon>
           </View>
+          
           
           {/* 2. box */}
           <Text h2 style={{fontWeight:'300', fontSize:17, padding:10}}>Current Category Name:{'\n'}{category.name}</Text>
@@ -100,9 +97,9 @@ export default function CategoriesUpdate({ route, navigation}) {
           
 
           <View style={{padding:10, marginTop:20}} >
-            <Input placeholder='Name' onChangeText={text => setName(text.trim())} ></Input>
+            <Input placeholder='Name'  onChangeText={text => setName(text.trim())} ></Input>
             <View style={{borderWidth: 1.5, borderColor:'gray', backgroundColor:'white',borderRadius:10, marginLeft:5, marginRight:5}} >
-              <TextInput placeholder='Description' maxLength={40} multiline={true} style={{minHeight:80, padding:10}}
+              <TextInput placeholder='Description' maxLength={40}  multiline={true} style={{minHeight:80, padding:10}}
                 onChangeText={ text => setDescription(text.trim())}   ></TextInput>
             </View>
           </View>
