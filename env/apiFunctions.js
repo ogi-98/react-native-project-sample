@@ -41,11 +41,11 @@ const manager = {
 
     } ,
 
-    patch: async (url, data) => {
+    put: async (url, data) => {
 
         let resultdata;
         let requestOptions = {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
@@ -57,6 +57,10 @@ const manager = {
                 .then((res) => res.json())
                 .then((data) => {
                 resultdata = data;
+                }).catch((err) => {
+                    console.log('====================================');
+                    console.log(err);
+                    console.log('====================================');
                 })
 
         return resultdata;
@@ -78,9 +82,6 @@ const manager = {
         method: 'DELETE',
         body: JSON.stringify(content)
     }
-console.log('====================================');
-console.log(conf);
-console.log('====================================');
     await fetch(conf.apiUrl + url + id, requestoptions)
             .then((res) => res.json())
             .then((data) => {

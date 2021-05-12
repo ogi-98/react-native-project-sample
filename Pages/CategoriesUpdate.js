@@ -1,23 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator, TextInput,Alert } from 'react-native';
-import { Input, Button , Icon} from 'react-native-elements';
+import { Input, Button , Icon, ListItem} from 'react-native-elements';
 import apiFuncs from '../env/apiFunctions';
 
 
 
-export default function CategoriesUpdate({ route, navigation}) {
+export default function CategoriesUpdate({ route, navigation :{ goBack}}) {
 
   const {id} = route.params;
   
 
   // Name and Description for updating
-  const [name, setName] = useState()
-  const [description, setDescription] = useState()
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
   //this is For ActivityIndicator
   const [animating,setAnimating] = useState(Boolean)
   const [category, setcategory] = useState([])
-  
+  const [Success,SetSuccess] = useState(false)
 
   useEffect(() => {
     fillDataFromWeb()
@@ -35,25 +35,39 @@ export default function CategoriesUpdate({ route, navigation}) {
       .then((data) => {
         setcategory(data)
         setAnimating(false)
+        SetSuccess(false)
       })
 
   }
 
   const updateData = (data) => {
-    setloading(true)
-    apiFuncs.patch('api/categories/'+ category.id, data)
+
+    if (name != '' || description != '') {
+      setloading(true)
+    apiFuncs.put('api/categories/'+ category.id, data)
     .then((result)=>{
       setloading(false)
+      SetSuccess(true)
+      setName('')
+      setDescription('')
+      
       Alert.alert(
+        "Success!",
         "Successful Update!",
-        [ { text: "OK", onPress: () => console.log("OK Pressed") } ]
+        [ { text: "OK", onPress: () => fillDataFromWeb() } ]
       )
+      
     })
+    } else {
+      Alert.alert(
+        "All Fields are empty!",
+        "You must fill least one row.",
+        [ { text: "Cancel" } ]
+      )
+    }
 
-  }
-
-  const updateBttnPress = () => {
     
+
   }
 
   const updateStop = () => {
@@ -61,13 +75,61 @@ export default function CategoriesUpdate({ route, navigation}) {
 
   }
 
+  const createDeleteAlert = (category) =>{
+
+    Alert.alert(
+      category.name,
+      "Are you sure about delete category",
+      [
+        {
+          text: "Cancel",
+      onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Delete",
+          onPress: () => deleteCategory(category.id),
+          style: "destructive"
+        }
+      ]
+    );
+  }//createDeleteAlert
+
+  const deleteCategory = (id) => {
+
+    apiFuncs.delete('api/categories/', id)
+    .then((data) => {
+      goBack()
+    })
+    .catch((msg) => {
+    })
+
+  }
+
+
+
+  const ConvertCheck = () =>{
+    if (Success) {
+      return (
+        <Icon reverse name='check-circle' type='material' color='green' ></Icon>
+      );
+    } else {
+      return (
+        <Icon name='autorenew' type='material' color='#4285F4' raised onPress={()=> updateData({
+          name: name != '' ? name : category.name,
+          description: description != '' ? description: category.description,
+          id: category.id
+        }) }></Icon>
+      );
+    }   
+  }
+
+
   if (animating) {
 
     return(
       <SafeAreaView style={styles.container}>
 
       <ActivityIndicator size= 'large'></ActivityIndicator>
-
 
       </SafeAreaView>
     );
@@ -86,13 +148,21 @@ export default function CategoriesUpdate({ route, navigation}) {
           <View style={{ flex: 1, alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between',marginLeft:10,
               marginRight:10, marginTop:20 , marginBottom: 20}}>
               <Text style={{ color: '#4285F4', fontWeight:'bold', fontSize: 24 }}>Category Update</Text>
-              <Icon name='autorenew' type='material' color='#4285F4' raised></Icon>
+              {ConvertCheck()}
           </View>
-          
+          {/* recycling  autorenew */}
           
           {/* 2. box */}
-          <Text h2 style={{fontWeight:'300', fontSize:17, padding:10}}>Current Category Name:{'\n'}{category.name}</Text>
-          <Text h4 style={{fontWeight:'300', fontSize:17, padding:10}}>Current Category Description:{'\n'}{category.description}</Text>
+          <Text style={{marginBottom:5, marginLeft:10, textDecorationLine:'underline'}}>Current Category:</Text>
+          <View style={{ flex: 1, alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between',marginLeft:10,
+              marginRight:10, marginTop:20 , marginBottom: 10, backgroundColor:'white', padding:8, borderRadius:8}}>
+              <View>
+                <Text h2 style={{fontWeight:'300', fontSize:17, fontWeight:'bold',}}>{category.name}</Text>
+                <Text h4 style={{fontWeight:'300', fontSize:17,}}>{category.description}</Text> 
+              </View>
+              <Icon name='delete' color='red' onPress={() => createDeleteAlert(category)}
+                containerStyle={{backgroundColor:'transparent', padding:8}}/>
+          </View>
 
           
 
