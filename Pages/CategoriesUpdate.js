@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, ActivityIndicator, TextInput,Alert } from 'react-native';
-import { Input, Button , Icon, ListItem} from 'react-native-elements';
+import { Input, Button , Icon} from 'react-native-elements';
 import apiFuncs from '../env/apiFunctions';
 
 
 
-export default function CategoriesUpdate({ route, navigation :{ goBack}}) {
+export default function CategoriesUpdate({ route, navigation :{ goBack} }) {
 
   const {id} = route.params;
   
@@ -17,6 +17,7 @@ export default function CategoriesUpdate({ route, navigation :{ goBack}}) {
   //this is For ActivityIndicator
   const [animating,setAnimating] = useState(Boolean)
   const [category, setcategory] = useState([])
+  //Succesful update
   const [Success,SetSuccess] = useState(false)
 
   useEffect(() => {
@@ -153,7 +154,7 @@ export default function CategoriesUpdate({ route, navigation :{ goBack}}) {
           {/* recycling  autorenew */}
           
           {/* 2. box */}
-          <Text style={{marginBottom:5, marginLeft:10, textDecorationLine:'underline'}}>Current Category:</Text>
+          <Text style={{marginBottom:5, marginLeft:10, textDecorationLine:'underline'}}>Current Category Preview:</Text>
           <View style={{ flex: 1, alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between',marginLeft:10,
               marginRight:10, marginTop:20 , marginBottom: 10, backgroundColor:'white', padding:8, borderRadius:8}}>
               <View>

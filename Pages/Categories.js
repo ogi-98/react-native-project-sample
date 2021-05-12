@@ -66,7 +66,7 @@ export default function Categories({ navigation }) {
     apiFuncs.get('api/categories')
       .then((data) => {
         setFilteredCategories(data);
-        // setcategories(data)
+        setcategories(data)
         setAnimating(false)
       })
 
