@@ -21,12 +21,12 @@ export default () => {
        <NavigationContainer >
         <Stack.Navigator initialRouteName='Home' screenOptions={{ gestureEnabled:true }}>
             <Stack.Screen name='Home' options={{headerShown:false}} component={MainScreen} />
-            <Stack.Screen name="Product" component={ProductScreen} />
-            <Stack.Screen name="ProductDetail" options={{title:'Product Detail'}} component={ProductScreenDetail} />
+            <Stack.Screen name="Product"  options={{headerTitle:'Products'}} component={ProductScreen}/>
+            <Stack.Screen name="ProductDetail" options={{headerTitle:'Product Detail'}} component={ProductScreenDetail} />
             <Stack.Screen name="Categories" options={{headerTitle:'Categories'}} component={Categories} />
-            <Stack.Screen name="CategoriesAdd" options={{title:'Categories Add'}} component={CategoriesAdd} />
-            <Stack.Screen name="CategoriesUpdate" options={{title:'Categories Update'}} component={CategoriesUpdate} />
-            <Stack.Screen name="Order" options={{title:'Order'}} component={OrderScreen} />
+            <Stack.Screen name="CategoriesAdd" options={{headerTitle:'Categories Add'}} component={CategoriesAdd} />
+            <Stack.Screen name="CategoriesUpdate" options={{headerTitle:'Categories Update'}} component={CategoriesUpdate} />
+            <Stack.Screen name="Order" options={{headerTitle:'Order'}} component={OrderScreen} />
         </Stack.Navigator>
     </NavigationContainer>
     );
