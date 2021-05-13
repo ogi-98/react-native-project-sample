@@ -185,8 +185,7 @@ export default function ProductScreen({ navigation }) {
         {
           filteredProducts.map((item,i) => (
             <ListItem bottomDivider key = {i} onPress={() => presRow(item)} 
-              containerStyle={{backgroundColor:'white', marginRight:10, marginLeft:10,
-              marginBottom:10, borderRadius:15,}}>
+              containerStyle={styles.boxWithShadow}>
 
                 <ListItem.Content>
 
@@ -255,5 +254,17 @@ const styles = StyleSheet.create({
     color: 'white', 
     fontWeight:'bold',
     fontSize: 17,
+  },
+  boxWithShadow:{
+    backgroundColor:'white', 
+    marginRight:10, 
+    marginLeft:10,
+    marginBottom:10, 
+    borderRadius:15,
+    shadowColor: 'gray',
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,  
+    elevation: 3
   },
 });

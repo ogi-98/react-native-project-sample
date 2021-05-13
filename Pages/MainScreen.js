@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-na
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons';
-
+import apiFuncs from '../env/apiFunctions';
 
 
 
@@ -14,6 +14,8 @@ export default function MainScreen({ navigation }) {
 
   // category fetching because I'll writes how many categories in categories subtitle
   const [categories, setcategories] = useState([]);
+  const [Products, setProducts] = useState([])
+  const [Orders, setOrders] = useState([])
   useEffect(() => {
 
     fillDataFromWeb();
@@ -21,13 +23,20 @@ export default function MainScreen({ navigation }) {
   }, []);
   const fillDataFromWeb = () => {
     
-    fetch('https://northwind.vercel.app/api/categories')
-    .then( (results) => results.json() )
-    .then( (data) => {
-
-      setcategories(data);
-
+    apiFuncs.get('api/categories')
+    .then((data) =>{
+      setcategories(data)
     })
+
+    apiFuncs.get('api/products')
+    .then((data) => {
+      setProducts(data)
+    })
+    apiFuncs.get('api/orders/?_limit=15')
+    .then((data) => {
+      setOrders(data)
+    })
+
 
   }
 
@@ -64,12 +73,12 @@ export default function MainScreen({ navigation }) {
         <View style={{ flex: 7 , margin:20}}>
 
             {/* Products Box  */}
-            <TouchableOpacity style={{ backgroundColor: '#D4EDE9', flex: 2, marginTop: 10, borderRadius: 10, padding: 20 }} 
+            <TouchableOpacity style={styles.flexbox1} 
               onPress={ProductPressHandler}>
               <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} >
                 <View>
                   <Text h3 style={styles.flexBoxTextStyle1}>Products</Text>
-                  <Text style={{ color: 'black', marginTop:5}}>11 diseases</Text>
+                  <Text style={{ color: 'black', marginTop:5}}>{Products.length} section</Text>
                 </View>
                 <View>
                   <Ionicons name="albums" size={24} color="black" /> 
@@ -78,12 +87,12 @@ export default function MainScreen({ navigation }) {
                 
             </TouchableOpacity>
             {/* Category Box  */}
-            <TouchableOpacity style={{ backgroundColor: '#FBB563', flex: 2, marginTop: 10, borderRadius: 10, padding: 20 }} 
+            <TouchableOpacity style={styles.flexbox2} 
               onPress={CategoryPressHandler}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} >
                   <View>
                     <Text h3 style={styles.flexBoxTextStyle2}>Categories</Text>
-                    <Text style={{ color: 'white', marginTop:5 }}>{categories.length} diseases</Text>
+                    <Text style={{ color: 'white', marginTop:5 }}>{categories.length} section</Text>
                   </View>
                   <View>
                     <MaterialIcons name="category" size={24} color="white" />
@@ -91,12 +100,12 @@ export default function MainScreen({ navigation }) {
                 </View>
             </TouchableOpacity>
             {/* Order Box  */}
-            <TouchableOpacity style={{ backgroundColor: '#448BA4', flex: 2, marginTop: 10, borderRadius: 10, padding: 20 }}
+            <TouchableOpacity style={styles.flexbox3}
               onPress={OrderPressHandler} >
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}} >
                   <View>
                     <Text h3 style={styles.flexBoxTextStyle2}>Orders</Text>
-                    <Text style={{ color: 'white', marginTop:5 }}>11 diseases</Text>
+                    <Text style={{ color: 'white', marginTop:5 }}>{Orders.length} section</Text>
                   </View>
                   <View>
                     <MaterialIcons name="shopping-cart" size={24} color="white" />
@@ -129,4 +138,40 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     fontSize: 17,
   },
+  flexbox1:{
+    backgroundColor: '#D4EDE9', 
+    flex: 2, 
+    marginTop: 10, 
+    borderRadius: 10, 
+    padding: 20,
+    shadowColor: 'gray',
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,  
+    elevation: 3
+  },
+  flexbox2:{
+    backgroundColor: '#FBB563', 
+    flex: 2,
+    marginTop: 10, 
+    borderRadius: 10, 
+    padding: 20,
+    shadowColor: 'gray',
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,  
+    elevation: 3
+  },
+  flexbox3: {
+    backgroundColor: '#448BA4', 
+    flex: 2, 
+    marginTop: 10, 
+    borderRadius: 10, 
+    padding: 20,
+    shadowColor: 'gray',
+    shadowOffset: { width: 2, height: 3 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,  
+    elevation: 3
+  }
 });

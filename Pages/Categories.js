@@ -200,8 +200,7 @@ export default function Categories({ navigation }) {
         {
           filteredCategories.map((item,i) => (
             <ListItem bottomDivider key = {i} onPress={() => presRow(item.id)} 
-              containerStyle={{backgroundColor:'white', marginRight:10, marginLeft:10,
-              marginBottom:10, borderRadius:15,}}>
+              containerStyle={styles.boxWithShadow} >
               <ListItem.Content >
                 <ListItem.Title style={{fontWeight:'bold'}}>{item.name}</ListItem.Title>
                 <ListItem.Subtitle style={{ color:'gray', fontWeight:'300'}}>{item.description}</ListItem.Subtitle>
@@ -229,4 +228,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  boxWithShadow:{
+    backgroundColor:'white', 
+    marginRight:10, 
+    marginLeft:10,
+    marginBottom:10, 
+    borderRadius:15,
+    shadowColor: 'gray',
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,  
+    elevation: 3
+  }
 });

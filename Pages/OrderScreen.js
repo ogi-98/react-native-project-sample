@@ -62,13 +62,6 @@ export default function OrderScreen({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-
-        {/* 1. box */}
-        {/* <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between',marginLeft:10,
-            marginRight:10, marginTop:10 }}>
-            
-        </View> */}
-
         <ScrollView>
           <RefreshControl refreshing={refreshing} onRefresh={() => refreshStarting()}/>
 
@@ -159,10 +152,16 @@ export default function OrderScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'lightgray',
+    backgroundColor: 'white',
     minHeight:120,
     margin: 5,
     borderRadius:8,
+    shadowColor: 'gray',
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,  
+    elevation: 3
+
   },
   DeleteButonStyle:{
     backgroundColor: 'red', 
