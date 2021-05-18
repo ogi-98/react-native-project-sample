@@ -14,6 +14,9 @@ export default function CategoriesUpdate({ route, navigation :{ goBack} }) {
   // Name and Description for updating
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  // Name and Description for preview
+  const [PreviewName, setPreviewName] = useState('')
+  const [PreviewDescription, setPreviewDescription] = useState()
   //this is For ActivityIndicator
   const [animating,setAnimating] = useState(Boolean)
   const [category, setcategory] = useState([])
@@ -35,6 +38,8 @@ export default function CategoriesUpdate({ route, navigation :{ goBack} }) {
     apiFuncs.get('api/categories/'+ id)
       .then((data) => {
         setcategory(data)
+        setPreviewName(data.name)
+        setPreviewDescription(data.description)
         setAnimating(false)
         SetSuccess(false)
       })
@@ -123,6 +128,23 @@ export default function CategoriesUpdate({ route, navigation :{ goBack} }) {
       );
     }   
   }
+  const nameChange = (text) =>{
+    setName(text)
+    if (text == '') {
+      setPreviewName(category.name)
+    } else {
+      setPreviewName(text)
+    }
+    
+  }
+  const descriptionChange = (text) => {
+    setDescription(text)
+    if (text == '') {
+      setPreviewDescription(category.description)
+    } else {
+      setPreviewDescription(text)
+    }
+  }
 
 
   if (animating) {
@@ -158,8 +180,8 @@ export default function CategoriesUpdate({ route, navigation :{ goBack} }) {
           <View style={{ flex: 1, alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between',marginLeft:10,
               marginRight:10, marginTop:20 , marginBottom: 10, backgroundColor:'white', padding:8, borderRadius:8}}>
               <View>
-                <Text h2 style={{fontWeight:'300', fontSize:17, fontWeight:'bold',}}>{category.name}</Text>
-                <Text h4 style={{fontWeight:'300', fontSize:17,}}>{category.description}</Text> 
+                <Text h2 style={{fontWeight:'300', fontSize:17, fontWeight:'bold',}}>{PreviewName}</Text>
+                <Text h4 style={{fontWeight:'300', fontSize:17,maxWidth:295}}>{PreviewDescription}</Text> 
               </View>
               <Icon name='delete' color='red' onPress={() => createDeleteAlert(category)}
                 containerStyle={{backgroundColor:'transparent', padding:8}}/>
@@ -168,10 +190,10 @@ export default function CategoriesUpdate({ route, navigation :{ goBack} }) {
           
 
           <View style={{padding:10, marginTop:20}} >
-            <Input placeholder='Name'  onChangeText={text => setName(text.trim())} ></Input>
+            <Input placeholder='Name'  onChangeText={text => nameChange(text.trim())} ></Input>
             <View style={{borderWidth: 1.5, borderColor:'gray', backgroundColor:'white',borderRadius:10, marginLeft:5, marginRight:5}} >
-              <TextInput placeholder='Description' maxLength={40}  multiline={true} style={{minHeight:80, padding:10}}
-                onChangeText={ text => setDescription(text.trim())}   ></TextInput>
+              <TextInput placeholder='Description' maxLength={55}  multiline={true} style={{minHeight:80, padding:10}}
+                onChangeText={ text => descriptionChange(text.trim())}   ></TextInput>
             </View>
           </View>
 

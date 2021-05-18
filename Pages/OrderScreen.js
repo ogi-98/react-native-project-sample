@@ -28,7 +28,10 @@ export default function OrderScreen({ navigation }) {
       })
   }
 
-
+  const sorted_orders = order.slice().sort((a,b) => {
+    return new Date(a.orderDate).getTime() - 
+        new Date(b.orderDate).getTime()
+}).reverse();
 
   useEffect(() => {
 
@@ -66,7 +69,7 @@ export default function OrderScreen({ navigation }) {
           <RefreshControl refreshing={refreshing} onRefresh={() => refreshStarting()}/>
 
         {
-          filteredOrder.map((item , key ) => (
+          sorted_orders.map((item , key ) => (
             <TouchableOpacity
             key= {item.id}
             style={styles.container}
