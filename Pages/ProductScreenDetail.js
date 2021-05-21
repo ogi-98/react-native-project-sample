@@ -11,7 +11,6 @@ export default function ProductScreenDetail({ route ,navigation}) {
   const {id, supplierId, categoryId, quantityPerUnit, unitPrice, unitsInStock,unitsOnOrder,
     reorderLevel,discontinued,name} = route.params;
   
-  const{ID}= route.params;
 
   const arr = 10;
   const mainPhotoArr = []
