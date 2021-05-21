@@ -149,7 +149,7 @@ export default function ProductScreen({ navigation }) {
               value={search}
         ></SearchBar>
 
-        <ActivityIndicator style={{alignItems:'center', marginTop:20}} size='large' animating= {animating}/>
+        <ActivityIndicator style={{alignItems:'center',justifyContent:'center', position: 'absolute', left: 0, right: 0, top: 0, bottom: 0,}} size='large' animating= {animating}/>
       </SafeAreaView>
     )
   }

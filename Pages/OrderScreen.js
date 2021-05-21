@@ -15,11 +15,11 @@ export default function OrderScreen({ navigation }) {
   const [animating,setAnimating] = useState(Boolean)
   //orders details
   const [Detail, seTDetail] = useState([])
-
+  // this is  For refreshing
   const [refreshing, setRefreshing] = useState(false);
   const refreshStarting = () => {
     setRefreshing(true)
-    // this is for get Category
+    // this is for get Orders
     apiFuncs.get('api/orders/?_limit=15')
       .then((data) => {
         setFilteredOrder(data)
@@ -31,13 +31,14 @@ export default function OrderScreen({ navigation }) {
   const sorted_orders = order.slice().sort((a,b) => {
     return new Date(a.orderDate).getTime() - 
         new Date(b.orderDate).getTime()
-}).reverse();
+  }).reverse();
 
   useEffect(() => {
 
     fillDataFromWeb();
 
   }, []);
+
   const fillDataFromWeb = () => {
     setAnimating(true)
     // this is for get Category
@@ -52,104 +53,173 @@ export default function OrderScreen({ navigation }) {
 
   }// fillDataFromWeb
 
-  const getDetailsFromWeb = (i) => {
+    //Delete icon Onpress Func
+    const deleteOrder = (id) => {
 
-    apiFuncs.get('api/orders/' + i)
-    .then((data) => {
-      seTDetail(data)
-    })
+      apiFuncs.delete('api/orders/', id)
+      .then((data) => {
+        fillDataFromWeb()
+      })
+      .catch((msg) => {
+      })
+  
+    }
+  
+  
+  // Creating alert for user be sure about deleting
+    const createDeleteAlert = (category) =>{
+  
+      Alert.alert(
+        "Order ID: " + category.id,
+        "Are you sure about delete order",
+        [
+          {
+            text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "Delete",
+            onPress: () => deleteOrder(category.id),
+            style: "destructive"
+          }
+        ]
+      );
+    }//createDeleteAlert
+
+  const goToDetailPage = (i) => {
+
+    navigation.navigate('OrderDetail', {
+      id: i.id,
+    });
 
   }
 
+
+  const downloadScreen = () =>{
+    return (
+      <SafeAreaView style={{ flex: 1 }} >
+        <ActivityIndicator style={{alignItems:'center',justifyContent:'center', position: 'absolute', left: 0, right: 0, top: 0, bottom: 0,}} size='large' animating= {animating}/>
+      </SafeAreaView>
+    )
+  }
+
+  if (animating) {
+    // this block works while fetching data
+    return(
+      // I create activity indicator, maybe user has a low internet connection
+      downloadScreen()
+
+    );
+  } else {
+
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+          <ScrollView>
+            <RefreshControl refreshing={refreshing} onRefresh={() => refreshStarting()}/>
   
-
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView>
-          <RefreshControl refreshing={refreshing} onRefresh={() => refreshStarting()}/>
-
-        {
-          sorted_orders.map((item , key ) => (
-            <TouchableOpacity
-            key= {item.id}
-            style={styles.container}
-            >
-              <View style={{margin:5,}}>
-                {/* 1. Row */}
-                <View style={{flex: 0.5, flexDirection:'row', justifyContent: 'space-between',alignSelf: 'stretch'}}>
-                  
-                <Text>Order ID: {item.id}</Text>
-                <Text >Order Date: {item.orderDate.substring(0, 11)}</Text>
-
-                </View>
-
-                <Icon name='chevron-right' style={{alignSelf: 'flex-end',marginTop:20}}  />
-
-              <View style={{flexDirection:'row', justifyContent: 'space-between',alignSelf: 'stretch',marginTop:20}} >
-              {/* 2. Row */}
-              <View style={{flex: 0.5, flexDirection:'column', justifyContent: 'space-between',alignItems:'flex-start'}}>
-                                
-                <Text >Arrived: {item.requiredDate.substring(0, 11)}</Text>
-                <Text >Shipped: {item.shippedDate.substring(0, 11)}</Text>
-
-                </View>
-
-                {/* 3. Row */}
-                <View style={{flex: 0.5, flexDirection:'column', justifyContent: 'space-between',alignItems:'flex-end'}}>
-                  
-                <Text>Ship Name: {item.shipName}</Text>
-                <Text >Customer Id: {item.customerId}</Text>
-
-                </View>
-              </View>
+          {
+            sorted_orders.map((item , key ) => (
+              <View
+              key= {item.id}
+              style={styles.container}
+              tou
+              >
                 
+                <View style={{margin:10,}}>
+                  {/* 1. Row */}
+                  <View style={{flex: 0.5, flexDirection:'row', justifyContent: 'space-between',alignSelf: 'stretch'}}>
+                    
+                    <View style={{flexDirection:'row',alignSelf: 'stretch', alignItems:'center'}}>
 
+                      <Icon name='badge' size={20}></Icon>
+
+                      <Text style={{marginLeft:5}}>Order ID: {item.id}</Text>
+
+                    </View>
+                  
+
+                    <View style={{flexDirection:'row',alignSelf: 'stretch', alignItems:'center'}}>
+
+                      <Icon name='today' size={20} ></Icon>
+
+                      <Text style={{marginLeft:5}}>Order Date: {item.orderDate.substring(0, 11)}</Text>
+
+                    </View>
+                  
+  
+                  </View>
+  
+  
+                  <View style={{flexDirection:'row', justifyContent: 'space-between',alignSelf: 'stretch',marginTop:20}} >
+                  {/* 2. Row */}
+                  <View style={{flex: 0.5, flexDirection:'column', justifyContent: 'space-between',alignItems:'flex-start'}}>
+                                  
+                  <View style={{flexDirection:'row',alignSelf: 'stretch', alignItems:'center'}}>
+
+                      <Icon name='flight-land' size={20} ></Icon>
+
+                      <Text style={{marginLeft:5}}>Arrived: {item.requiredDate.substring(0, 11)}</Text>
+
+                  </View>                
+                  
+                  <View style={{flexDirection:'row',alignSelf: 'stretch', alignItems:'center'}}>
+
+                      <Icon name='flight-takeoff' size={20} ></Icon>
+
+                      <Text style={{marginLeft:5}}>Shipped: {item.shippedDate.substring(0, 11)}</Text>
+
+                  </View> 
+                  
+  
+                  </View>
+  
+                  {/* 3. Row */}
+                  <View style={{flex: 0.5, flexDirection:'column', justifyContent: 'space-between',alignItems:'flex-end'}}>
+                    
+                  <View style={{flexDirection:'row',alignSelf: 'stretch', alignItems:'center'}}>
+
+                    <Icon name='local-shipping' size={20} ></Icon>
+
+                    <Text style={{marginLeft:5}}>Ship Name: {item.shipName}</Text>
+
+                  </View>  
+
+                  <View style={{flexDirection:'row',alignSelf: 'stretch', alignItems:'center'}}>
+
+                    <Icon name='storefront' size={20} ></Icon>
+
+                    <Text style={{marginLeft:5}}>Customer Id: {item.customerId}</Text>
+
+                  </View> 
+                  
+                  
+  
+                  </View>
+                </View>
+                  
+  
+                </View>
+  
+                <TouchableOpacity onPress={()=> createDeleteAlert(item)}>
+  
+                <View style={{flexDirection:'row', justifyContent: 'space-between',alignSelf: 'stretch', backgroundColor:'red', margin:10, borderRadius:10}}>
+                <Button title='Delete Order' color='white'/>
+                <Icon name='delete' color='white' containerStyle={{backgroundColor:'transparent', padding:8}}/>
+                </View>
+  
+                
+                </TouchableOpacity>
+  
               </View>
+            ))
+          }
+          </ScrollView>
+  
+      </SafeAreaView>
+    );
+  }
 
-              <View style={{flexDirection:'row', justifyContent: 'space-between',alignSelf: 'stretch', backgroundColor:'red', margin:10, borderRadius:10}}>
-              <Button title='Delete Order' color='white'/>
-              <Icon name='delete' color='white' containerStyle={{backgroundColor:'transparent', padding:8}}/>
-              </View>
-
-              
-
-            </TouchableOpacity>
-          ))
-        }
-
-
-
-
-
-
-
-{/* 
-          {filteredOrder.map((item , key ) => (
-            <ListItem key = {key}>
-              <ListItem.Content backgroundColor='lightgray' padding={50}>
-
-              <View style={{flexDirection:'row', justifyContent:'space-between', flex:1.0}}>
-              <ListItem.Title style={{fontWeight:'bold'}}>Customer Id: {item.customerId}</ListItem.Title>
-              <Text>Order Date: {item.orderDate}</Text>
-              
-              <Text>Customer Id: {item.customerId}</Text>
-              <Text>Ship Name: {item.shipName}</Text>
-              </View>
-              <ListItem.Subtitle style={{ color:'gray', fontWeight:'300'}}>Ship Name: {item.shipName}</ListItem.Subtitle>
-              </ListItem.Content>
-              
-
-
-            </ListItem>
-            console.log("shipname:");
-            console.log(item.shipName);
-            console.log("item.detail.productId:");
-            console.log(item.details.productId);
-          ))} */}
-        </ScrollView>
-
-    </SafeAreaView>
-);
+  
 }
 
 const styles = StyleSheet.create({
@@ -157,7 +227,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     minHeight:120,
-    margin: 5,
+    margin: 10,
     borderRadius:8,
     shadowColor: 'gray',
     shadowOffset: { width: 1, height: 2 },
