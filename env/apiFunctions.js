@@ -2,8 +2,7 @@ import conf from '../env/helper';
 
 const manager = {
 
-
-    //GET
+    //GET using to get data from web
     get: async (url) => {
 
         let data;
@@ -18,7 +17,7 @@ const manager = {
         return data
 
     } ,
-    //POST
+    //POST using when add data to web
     post: async (url, data) => {
 
         let resultdata;
@@ -26,7 +25,7 @@ const manager = {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
-                // Accept: 'application/json',
+                Accept: 'application/json',
                 'Content-Type': 'application/json'
             }
         }
@@ -40,7 +39,7 @@ const manager = {
         return resultdata;
 
     } ,
-
+    // PUT using when update data 
     put: async (url, data) => {
 
         let resultdata;
@@ -67,7 +66,7 @@ const manager = {
 
     } ,
 
-    //DELETE
+    //DELETE using when delete existing data
   
    delete: async (url,id) => {
 
@@ -91,8 +90,6 @@ const manager = {
             })
 
     return resultdata
-
-
 
   } ,
 

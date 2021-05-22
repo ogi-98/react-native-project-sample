@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState,useEffect} from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, RefreshControl, View, Text, TouchableOpacity, Button } from 'react-native';
+import { Platform } from 'react-native'
 import { Icon, ListItem, SearchBar } from 'react-native-elements';
 import apiFuncs from '../env/apiFunctions';
 
@@ -10,11 +11,8 @@ export default function OrderScreen({ navigation }) {
 
    // order array useState constant
   const [order, setOrder] = useState([]);
-  const [filteredOrder, setFilteredOrder] = useState([]);
   //this is For ActivityIndicator
   const [animating,setAnimating] = useState(Boolean)
-  //orders details
-  const [Detail, seTDetail] = useState([])
   // this is  For refreshing
   const [refreshing, setRefreshing] = useState(false);
   const refreshStarting = () => {
@@ -44,7 +42,6 @@ export default function OrderScreen({ navigation }) {
     // this is for get Category
       apiFuncs.get('api/orders/?_limit=15')  // learn limit from https://stackoverflow.com/questions/52842039/how-to-limit-the-amount-of-data-returned-from-a-json-file-using-fetch/52842411
       .then((data) => {
-        setFilteredOrder(data);
         setOrder(data)
         setAnimating(false)
       })
@@ -71,7 +68,7 @@ export default function OrderScreen({ navigation }) {
   
       Alert.alert(
         "Order ID: " + category.id,
-        "Are you sure about delete order",
+        "Are you sure about delete order ?",
         [
           {
             text: "Cancel",
@@ -85,14 +82,6 @@ export default function OrderScreen({ navigation }) {
         ]
       );
     }//createDeleteAlert
-
-  const goToDetailPage = (i) => {
-
-    navigation.navigate('OrderDetail', {
-      id: i.id,
-    });
-
-  }
 
 
   const downloadScreen = () =>{
@@ -203,7 +192,7 @@ export default function OrderScreen({ navigation }) {
                 <TouchableOpacity onPress={()=> createDeleteAlert(item)}>
   
                 <View style={{flexDirection:'row', justifyContent: 'space-between',alignSelf: 'stretch', backgroundColor:'red', margin:10, borderRadius:10}}>
-                <Button title='Delete Order' color='white'/>
+                <Button title='Delete Order' color={versionColor()}  />
                 <Icon name='delete' color='white' containerStyle={{backgroundColor:'transparent', padding:8}}/>
                 </View>
   
@@ -220,6 +209,20 @@ export default function OrderScreen({ navigation }) {
   }
 
   
+}
+const versionColor = () => {
+  if (Platform.OS === 'ios') {
+    // do something for ios
+    return 'white'
+  } else if (Platform.OS === 'android') {
+    // other thing for android
+    return 'white'
+  } else if (Platform.OS === 'web') {
+    // it's on web!
+    return 'red'
+  } else {
+    // you probably won't end up here unless you support another platform!
+  }
 }
 
 const styles = StyleSheet.create({

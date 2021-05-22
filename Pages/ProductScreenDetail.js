@@ -34,13 +34,9 @@ export default function ProductScreenDetail({ route ,navigation}) {
     .then( (results) => results.json() )
     .then( (data) => {
 
-      
       setProductDetail(data);
 
-
     })
-
-    
 
   }
 
@@ -49,10 +45,8 @@ export default function ProductScreenDetail({ route ,navigation}) {
     fetch('https://northwind.vercel.app/api/products/' + categoryId)
     .then( (results) => results.json() )
     .then( (data) => {
-
       
       setcategory(data);
-
 
     })
 
@@ -152,8 +146,10 @@ export default function ProductScreenDetail({ route ,navigation}) {
         
 
     </SafeAreaView>
-);
+  );
+  
 }
+
 const StockNonStock = (p) =>{
   let num = Number(p.unitsInStock);
   if (num > 0) {
@@ -166,6 +162,7 @@ const StockNonStock = (p) =>{
     );
   }
 }
+
 const altPhoto = () =>{
   const photoArr = []
   const links = ['https://images.unsplash.com/photo-1552058544-f2b08422138a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=688&q=80',
@@ -188,17 +185,19 @@ const altPhoto = () =>{
     'https://images.unsplash.com/photo-1589571894960-20bbe2828d0a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=666&q=80',
     'https://images.unsplash.com/photo-1569124589354-615739ae007b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80',
     'https://images.unsplash.com/photo-1612061279301-c1bd3a484fcf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80'
-    ]
+  ]
+
   for (let i = 0; i <= 19; i++) {
     
-      photoArr.push(
-        (
-          <Image key={i} style={{height:50, width:50,borderRadius:50, marginLeft:15}} 
-          source={{uri: links[i]}}>
-          </Image>
-        )
-  
+    photoArr.push(
+      (
+        <Image key={i} style={{height:50, width:50,borderRadius:50, marginLeft:15}} 
+        source={{uri: links[i]}}>
+        </Image>
       )
+
+    )
+
   }
   
   return photoArr
@@ -218,16 +217,7 @@ const ButtonStock = (p) =>{
 }
 
 const priceView = (i) =>{
-  // let num = Number(i.unitsInStock);
-  // if (num > 0) {
-  //   return (
-  //     <Text style={{fontWeight:'bold', fontSize:24}}>{i.unitPrice} $</Text>
-  //   );
-  // } else {
-  //   return (
-  //     <Text style={{fontWeight:'300'}}>{i.unitPrice} $</Text>
-  //   );
-  // }
+
   return (
     <Text style={{fontWeight:'bold', fontSize:24}}>{i.unitPrice} $</Text>
   );
