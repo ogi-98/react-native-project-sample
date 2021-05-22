@@ -26,18 +26,12 @@ export default () => {
             <Stack.Screen name="Categories" options={{headerTitle:'Categories'}} component={Categories} />
             <Stack.Screen name="CategoriesAdd" options={{headerTitle:'Categories Add'}} component={CategoriesAdd} />
             <Stack.Screen name="CategoriesUpdate" options={{headerTitle:'Categories Update'}} component={CategoriesUpdate} />
-            <Stack.Screen name="Order" options={{headerTitle:'Order'}} component={OrderScreen} />
+            <Stack.Screen name="Order" options={{headerTitle:'Order', headerRight:() => (
+                <Icon name='shopping-cart' style={{marginRight:10}}></Icon>
+            ),}} component={OrderScreen} />
         </Stack.Navigator>
     </NavigationContainer>
     );
 
 }
 
-const pressAddCategory = () =>{
-    (   <Icon 
-            name='add'
-            onPress={() => Categories.arguments.pressAddCategory() }
-        />
-    )
-    
-}
