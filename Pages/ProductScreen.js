@@ -91,6 +91,26 @@ export default function ProductScreen({ navigation }) {
 
 // creating ALERT for user be sure about deleting
   const createDeleteAlert = (product) =>{
+
+    if (Platform.OS === 'ios') {
+      // do something for ios
+      nativeDeleteAlert(product)
+
+    } else if (Platform.OS === 'android') {
+      // other thing for android
+      nativeDeleteAlert(product)
+
+    } else if (Platform.OS === 'web') {
+      // it's on web!
+      deleteProduct(product.id)
+
+    } else {
+      // you probably won't end up here unless you support another platform!
+    }
+
+  }
+  // native alert Create
+  const nativeDeleteAlert = (product) => {
     Alert.alert(
       product.name,
       "Are you sure about delete product",

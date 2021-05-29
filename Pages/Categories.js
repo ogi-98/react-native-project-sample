@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState,useEffect} from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, RefreshControl } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, RefreshControl, Platform } from 'react-native';
 import { ListItem, SearchBar } from 'react-native-elements';
 import { Icon } from 'react-native-elements/dist/icons/Icon';
 import apiFuncs from '../env/apiFunctions';
@@ -88,7 +88,24 @@ export default function Categories({ navigation }) {
 
 // Creating alert for user be sure about deleting
   const createDeleteAlert = (category) =>{
+    if (Platform.OS === 'ios') {
+      // do something for ios
+      nativeDeleteAlert(category)
 
+    } else if (Platform.OS === 'android') {
+      // other thing for android
+      nativeDeleteAlert(category)
+
+    } else if (Platform.OS === 'web') {
+      // it's on web!
+      deleteCategory(category.id)
+
+    } else {
+      // you probably won't end up here unless you support another platform!
+    }
+  }//createDeleteAlert
+  // native alert Create
+  const nativeDeleteAlert = (category) => {
     Alert.alert(
       category.name,
       "Are you sure about delete category",
@@ -104,8 +121,7 @@ export default function Categories({ navigation }) {
         }
       ]
     );
-  }//createDeleteAlert
-
+  }
   
 
   const presRow = (gelenId) =>{

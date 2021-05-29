@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState,useEffect} from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, RefreshControl, View, Text, TouchableOpacity, Button } from 'react-native';
-import { Platform } from 'react-native'
+import { StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, RefreshControl, View, Text, TouchableOpacity, Button, Platform} from 'react-native';
 import { Icon, ListItem, SearchBar } from 'react-native-elements';
 import apiFuncs from '../env/apiFunctions';
 
@@ -64,24 +63,41 @@ export default function OrderScreen({ navigation }) {
   
   
   // Creating alert for user be sure about deleting
-    const createDeleteAlert = (category) =>{
+    const createDeleteAlert = (order) =>{
+      if (Platform.OS === 'ios') {
+        // do something for ios
+        nativeDeleteAlert(order)
   
-      Alert.alert(
-        "Order ID: " + category.id,
-        "Are you sure about delete order ?",
-        [
-          {
-            text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { text: "Delete",
-            onPress: () => deleteOrder(category.id),
-            style: "destructive"
-          }
-        ]
-      );
+      } else if (Platform.OS === 'android') {
+        // other thing for android
+        nativeDeleteAlert(order)
+  
+      } else if (Platform.OS === 'web') {
+        // it's on web!
+        deleteOrder(order.id)
+  
+      } else {
+        // you probably won't end up here unless you support another platform!
+      }
     }//createDeleteAlert
+  // native alert Create
+  const nativeDeleteAlert = (order) => {
+    Alert.alert(
+      "Order ID: " + order.id,
+      "Are you sure about delete order ?",
+      [
+        {
+          text: "Cancel",
+      onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Delete",
+          onPress: () => deleteOrder(order.id),
+          style: "destructive"
+        }
+      ]
+    );
+  }
 
 
   const downloadScreen = () =>{
